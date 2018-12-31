@@ -11,12 +11,13 @@ public:
 	void perlin_generate_perm(int** p);
 	void permute(int* p, int n);
 	float noise(const CVec3& p) const;
-	float trilinear_interp(float value[2][2][2], float u, float v, float w) const;
+	float trilinear_interp(const CVec3 value[2][2][2], float u, float v, float w) const;
+	float turb(const CVec3& p, int depth = 7);
 
 	static perlin_noise& get_instance();
 
 private:
-	float* _ranfloat;
+	CVec3* _ranvec3;
 	int* perm_x;
 	int* perm_y;
 	int* perm_z;

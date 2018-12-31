@@ -34,5 +34,9 @@ class noise_texture : public texture
 {
 public:
 	noise_texture();
+	noise_texture(float scale);
 	virtual CVec3 color(float u, float v, const CVec3& p);
+
+private:
+	float _scale;
 };

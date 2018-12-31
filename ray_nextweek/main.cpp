@@ -55,8 +55,9 @@ hitable *two_perlin_sphere() {
 	int n = 2;
 	hitable **list = new hitable*[n + 1];
 
-	list[0] = new CSphere(CVec3(0, -1000, 0), 1000, new lambertian(new noise_texture()));
-	list[1] = new CSphere(CVec3(0, 2, 0), 2, new lambertian(new noise_texture()));
+	float scale = 6.0f;
+	list[0] = new CSphere(CVec3(0, -1000, 0), 1000, new lambertian(new noise_texture(scale)));
+	list[1] = new CSphere(CVec3(0, 2, 0), 2, new lambertian(new noise_texture(scale)));
 
 	return new Chitlist(list, 2);
 }

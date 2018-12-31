@@ -17,10 +17,10 @@ perlin_noise::perlin_noise()
 
 void perlin_noise::perlin_generate()
 {
-	_ranfloat = new float[256];
+	_ranvec3 = new CVec3[256];
 	for (int i = 0; i < 256; i++)
 	{
-		_ranfloat[i] = randf();
+		_ranvec3[i] = CVec3( 2.0f * randf() - 1.0f, 2.0f * randf() - 1.0f, 2.0f * randf() - 1.0f);
 	}
 }
 
@@ -50,29 +50,50 @@ float perlin_noise::noise(const CVec3& p) const
 	float u = p.x() - floor(p.x());
 	float v = p.y() - floor(p.y());
 	float w = p.z() - floor(p.z());
-	int i = int(p.x());
-	int j = int(p.y());
-	int k = int(p.z());
-	float value[2][2][2];
+	int i = floor(p.x());
+	int j = floor(p.y());
+	int k = floor(p.z());
+
+	CVec3 value[2][2][2];
 	for (int di = 0; di < 2; di++)
 		for (int dj = 0; dj < 2; dj++)
 			for (int dk = 0; dk < 2; dk++)
 			{
-				value[di][dj][dk] = _ranfloat[perm_x[(i + di) & 255] ^ perm_y[(j + dj) & 255] ^ perm_z[(k + dk) & 255]];
+				value[di][dj][dk] = _ranvec3[perm_x[(i + di) & 255] ^ perm_y[(j + dj) & 255] ^ perm_z[(k + dk) & 255]];
 			}
 
 	return trilinear_interp(value, u, v, w);
 }
 
-float perlin_noise::trilinear_interp(float value[2][2][2], float u, float v, float w) const
+float perlin_noise::trilinear_interp(const CVec3 value[2][2][2], float u, float v, float w) const
 {
 	float accum = 0.0f;
+	
+	float uu = u * u * (3 - 2 * u);
+	float vv = v * v * (3 - 2 * v);
+	float ww = w * w * (3 - 2 * w);
+
 	for(int i = 0; i < 2; i++)
 		for (int j = 0; j < 2; j++)
 			for (int k = 0; k < 2; k++)
 			{
-				accum += (i * u + (1 - u)*(1 - i)) * (j * v + (1 - v)*(1 - j)) * (k * w + (1 - w)*(1 - k)) * value[i][j][k];
+				CVec3 weight(u - i, v - j, w - k);
+				accum += (i * uu + (1 - uu)*(1 - i)) * (j * vv + (1 - vv)*(1 - j)) * (k * ww + (1 - ww)*(1 - k)) * dot_product(value[i][j][k], weight);
 			}
 
 	return accum;
+}
+
+float perlin_noise::turb(const CVec3& p, int depth)
+{
+	CVec3 temp_p = p;
+	float weight = 1.0f;
+	float accum = 0.0f;
+	for (int i = 0; i < depth; i++)
+	{
+		accum += weight * noise(temp_p);
+		temp_p *= 2.0f;
+		weight *= 0.5f;
+	}
+	return fabs(accum);
 }
