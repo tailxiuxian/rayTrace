@@ -39,7 +39,7 @@ noise_texture::noise_texture(float scale)
 
 CVec3 noise_texture::color(float u, float v, const CVec3& p)
 {
-	return CVec3(1.0f, 1.0f, 1.0f) * perlin_noise::get_instance().turb(p);
+	//return CVec3(1.0f, 1.0f, 1.0f) * perlin_noise::get_instance().turb(p);
 
-	//return CVec3(1.0f, 1.0f, 1.0f) * 0.5f * (1.0f + sin(_scale * p.z() + 10.0f * perlin_noise::get_instance().noise(p)));
+	return CVec3(1.0f, 1.0f, 1.0f) * 0.5f * (1.0f + sin(_scale * p.z() + 10.0f * perlin_noise::get_instance().noise(p)));
 }

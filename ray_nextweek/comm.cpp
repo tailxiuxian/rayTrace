@@ -12,20 +12,22 @@ CVec3 color(CRay r, hitable* world, int depth)
 	{
 		CRay ray_scattered;
 		CVec3 attenuation;
+		CVec3 emitted = rec.mat_ptr->emit(0.0f, 0.0f, rec.p);
 		if (depth < MAX_SCATTER_DEPTH && rec.mat_ptr->scatter(r, rec, attenuation, ray_scattered))
 		{
-			return attenuation * color(ray_scattered, world, depth + 1);
+			return emitted + attenuation * color(ray_scattered, world, depth + 1);
 		}
 		else
 		{
-			return CVec3(0.0f, 0.0f, 0.0f);
+			return emitted;
 		}
 	}
 	else
 	{
-		CVec3 unit_direction = unit_vector(r.direction());
-		float t = (1.0f + unit_direction.y()) / 2.0f;
-		return CVec3(1.0f, 1.0f, 1.0f) * (1.0f - t) + CVec3(0.5f, 0.7f, 1.0f) * t;
+		//CVec3 unit_direction = unit_vector(r.direction());
+		//float t = (1.0f + unit_direction.y()) / 2.0f;
+		//return CVec3(1.0f, 1.0f, 1.0f) * (1.0f - t) + CVec3(0.5f, 0.7f, 1.0f) * t;
+		return CVec3(0.0f, 0.0f, 0.0f);
 	}
 }
 

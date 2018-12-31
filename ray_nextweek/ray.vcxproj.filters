@@ -37,6 +37,9 @@
     <ClCompile Include="perlin_noise.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="rect.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vec3.h">
@@ -73,6 +76,9 @@
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="perlin_noise.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="rect.h">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>

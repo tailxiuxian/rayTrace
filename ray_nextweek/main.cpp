@@ -7,6 +7,7 @@
 #include "comm.h"
 #include "camara.h"
 #include "material.h"
+#include "rect.h"
 
 hitable *random_scene() {
 	int n = 500;
@@ -62,15 +63,29 @@ hitable *two_perlin_sphere() {
 	return new Chitlist(list, 2);
 }
 
+hitable *simple_light() {
+	int n = 4;
+	hitable **list = new hitable*[n + 1];
+
+	float scale = 4.0f;
+	list[0] = new CSphere(CVec3(0, -1000, 0), 1000, new lambertian(new noise_texture(scale)));
+	list[1] = new CSphere(CVec3(0, 2, 0), 2, new lambertian(new noise_texture(scale)));
+	list[2] = new CSphere(CVec3(0, 7, 0), 2, new diffuse_light(new constant_texture(CVec3(4.0f, 4.0f, 4.0f))));
+	list[3] = new xy_rect(3, 5, 1, 3, -2 , new diffuse_light(new constant_texture(CVec3(4.0f, 4.0f, 4.0f))));
+
+	return new Chitlist(list, 4);
+}
+
 int main()
 {
 	freopen("data.ppm", "w", stdout);
 
 	int nx = 1200;
 	int ny = 800;
-	int ns = 10;
+	int ns = 120;
 
-	CVec3 lookfrom(13, 2, 3);
+	CVec3 lookfrom_origin(13.0f, 2.0f, 5.0f);
+	CVec3 lookfrom(lookfrom_origin * 3.0f);
 	CVec3 lookat(0, 0, 0);
 	float dist_to_focus = 10.0f;
 	float aperture = 0.0f;
@@ -86,7 +101,8 @@ int main()
 	//hitable *world = new Chitlist(list, 4);
 	//hitable *world = random_scene();
 	//hitable *world = two_checker_sphere();
-	hitable *world = two_perlin_sphere();
+	//hitable *world = two_perlin_sphere();
+	hitable *world = simple_light();
 
 	std::cout << "P3\n" << nx << " " << ny << "\n255\n";
 	for (int j = ny - 1; j >= 0; j--)

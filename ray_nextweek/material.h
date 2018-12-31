@@ -8,6 +8,11 @@ class matrial
 {
 public:
 	virtual bool scatter(CRay& ray_in, hit_record& rec, CVec3& attenuation, CRay& ray_scatter) = 0;
+
+	virtual CVec3 emit(float u, float v, const CVec3& p)
+	{
+		return CVec3(0.0f, 0.0f, 0.0f);
+	}
 };
 
 class lambertian : public matrial
@@ -115,4 +120,27 @@ public:
 
 private:
 	float _refraction;
+};
+
+class diffuse_light : public matrial
+{
+public:
+	diffuse_light(texture* tex)
+		:_tex(tex)
+	{}
+
+	virtual ~diffuse_light() {};
+
+	virtual bool scatter(CRay& ray_in, hit_record& rec, CVec3& attenuation, CRay& ray_scatter)
+	{
+		return false;
+	}
+
+	virtual CVec3 emit(float u, float v, const CVec3& p)
+	{
+		return _tex->color(u, v, p);
+	}
+
+private:
+	texture * _tex;
 };
