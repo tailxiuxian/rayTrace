@@ -119,30 +119,38 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="aabb.cpp" />
+    <ClCompile Include="box.cpp" />
     <ClCompile Include="bvh_node.cpp" />
     <ClCompile Include="comm.cpp" />
+    <ClCompile Include="constant_medium.cpp" />
     <ClCompile Include="hit_list.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="moving_sphere.cpp" />
     <ClCompile Include="perlin_noise.cpp" />
     <ClCompile Include="rect.cpp" />
+    <ClCompile Include="rotate.cpp" />
     <ClCompile Include="sphere.cpp" />
     <ClCompile Include="texture.cpp" />
+    <ClCompile Include="translate.cpp" />
     <ClCompile Include="vec3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aabb.h" />
+    <ClInclude Include="box.h" />
     <ClInclude Include="bvh_node.h" />
     <ClInclude Include="camara.h" />
     <ClInclude Include="comm.h" />
+    <ClInclude Include="constant_medium.h" />
     <ClInclude Include="hit_list.h" />
     <ClInclude Include="material.h" />
     <ClInclude Include="moving_sphere.h" />
     <ClInclude Include="perlin_noise.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="rect.h" />
+    <ClInclude Include="rotate.h" />
     <ClInclude Include="sphere.h" />
     <ClInclude Include="texture.h" />
+    <ClInclude Include="translate.h" />
     <ClInclude Include="vec3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

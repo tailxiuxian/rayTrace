@@ -144,3 +144,23 @@ public:
 private:
 	texture * _tex;
 };
+
+class istropic : public matrial
+{
+public:
+	istropic(texture* tex)
+		:_tex(tex)
+	{}
+
+	virtual ~istropic() {};
+
+	virtual bool scatter(CRay& ray_in, hit_record& rec, CVec3& attenuation, CRay& ray_scatter)
+	{
+		ray_scatter = CRay(rec.p, random_vec_in_sphere(), ray_in.get_time());
+		attenuation = _tex->color(0, 0, rec.p);
+		return true;
+	}
+
+private:
+	texture * _tex;
+};

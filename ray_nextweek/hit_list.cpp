@@ -9,7 +9,7 @@ bool Chitlist::hit(CRay& ray, float tmin, float tmax, hit_record& record)
 	}
 
 	hit_record temp;
-	float tclose = FLT_MAX;
+	float tclose = tmax;
 	bool hit = false;
 	for (int i = 0; i < _size; i++)
 	{

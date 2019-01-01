@@ -40,6 +40,18 @@
     <ClCompile Include="rect.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="box.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="translate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="rotate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="constant_medium.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vec3.h">
@@ -79,6 +91,18 @@
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="rect.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="box.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="translate.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="rotate.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="constant_medium.h">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
