@@ -102,7 +102,7 @@ bvh_node::bvh_node(hitable** l, int size, float time0, float time1)
 	else
 	{
 		_left = new bvh_node(l, size / 2, time0, time1);
-		_right = new bvh_node(l, size - size / 2, time0, time1);
+		_right = new bvh_node(l + size / 2, size - size / 2, time0, time1);
 	}
 
 	aabb boxleft, boxright;
@@ -120,7 +120,7 @@ bool bvh_node::hit(CRay& ray, float tmin, float tmax, hit_record& record)
 	{
 		hit_record rec_left, rec_right;
 		bool left_hit = _left->hit(ray, tmin, tmax, rec_left);
-		bool right_hit = _left->hit(ray, tmin, tmax, rec_right);
+		bool right_hit = _right->hit(ray, tmin, tmax, rec_right);
 
 		if (left_hit && right_hit)
 		{

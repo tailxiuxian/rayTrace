@@ -12,6 +12,7 @@
 #include "translate.h"
 #include "rotate.h"
 #include "constant_medium.h"
+#include "bvh_node.h"
 
 hitable *random_scene() {
 	int n = 500;
@@ -131,13 +132,46 @@ hitable *cornell_smoke()
 	return new Chitlist(list, i);
 }
 
+hitable *final()
+{
+	int nb = 20;
+	hitable **list = new hitable*[30];
+	hitable **boxlist = new hitable*[10000];
+
+	int l = 0;
+	matrial* light = new diffuse_light(new constant_texture(CVec3(1.0f, 1.0f, 1.0f)));
+	list[l++] = new xz_rect(123, 423, 147, 412, 1, light);
+
+	matrial* ground = new lambertian(new constant_texture(CVec3(0.48f, 0.83f, 0.53f)));
+	int b = 0;
+	for (int i = 0; i < nb; i++)
+		for (int j = 0; j < nb; j++)
+		{
+			float w = 100;
+			float x0 = i * w;
+			float z0 = j * w;
+			float y0 = 555.0f - 100.0f * (randf() + 0.01f);
+			float x1 = x0 + w;
+			float z1 = z0 + w;
+			float y1 = 555;
+			boxlist[b++] = new box(CVec3(x0, y0, z0), CVec3(x1, y1, z1), ground);
+		}
+
+	list[l++] = new bvh_node(boxlist, b, 0, 1);
+
+	list[l++] = new CSphere(CVec3(260, 405, 45), 50, new dielectric(1.5));
+	list[l++] = new CSphere(CVec3(0, 405, 145), 50, new metal(CVec3(0.8, 0.8, 0.9), 10.0));
+
+	return new Chitlist(list, l);
+}
+
 int main()
 {
 	freopen("data.ppm", "w", stdout);
 
 	int nx = 1200;
 	int ny = 800;
-	int ns = 200;
+	int ns = 2000;
 
 	//CVec3 lookfrom_origin(13.0f, 2.0f, 5.0f);
 	//CVec3 lookfrom(lookfrom_origin * 3.0f);
@@ -163,7 +197,8 @@ int main()
 	//hitable *world = two_perlin_sphere();
 	//hitable *world = simple_light();
 	//hitable *world = cornell_box();
-	hitable *world = cornell_smoke();
+	//hitable *world = cornell_smoke();
+	hitable *world = final();
 
 	std::cout << "P3\n" << nx << " " << ny << "\n255\n";
 	for (int j = ny - 1; j >= 0; j--)
