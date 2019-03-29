@@ -117,6 +117,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="calc_thread.cpp" />
+    <ClCompile Include="calc_thread_mgr.cpp" />
     <ClCompile Include="comm.cpp" />
     <ClCompile Include="hit_list.cpp" />
     <ClCompile Include="main.cpp" />
@@ -125,6 +127,8 @@
     <ClCompile Include="vec3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="calc_thread.h" />
+    <ClInclude Include="calc_thread_mgr.h" />
     <ClInclude Include="camara.h" />
     <ClInclude Include="comm.h" />
     <ClInclude Include="hit_list.h" />
