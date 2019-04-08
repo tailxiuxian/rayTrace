@@ -13,3 +13,10 @@ float schlick(float cosine, float refraction);
 float ffmin(float a, float b);
 float ffmax(float a, float b);
 aabb surronding_box(aabb box0, aabb box1);
+
+struct SPixelColor
+{
+	int ir;
+	int ig;
+	int ib;
+};

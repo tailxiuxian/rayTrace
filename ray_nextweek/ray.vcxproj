@@ -121,6 +121,8 @@
     <ClCompile Include="aabb.cpp" />
     <ClCompile Include="box.cpp" />
     <ClCompile Include="bvh_node.cpp" />
+    <ClCompile Include="calc_thread.cpp" />
+    <ClCompile Include="calc_thread_mgr.cpp" />
     <ClCompile Include="comm.cpp" />
     <ClCompile Include="constant_medium.cpp" />
     <ClCompile Include="hit_list.cpp" />
@@ -138,6 +140,8 @@
     <ClInclude Include="aabb.h" />
     <ClInclude Include="box.h" />
     <ClInclude Include="bvh_node.h" />
+    <ClInclude Include="calc_thread.h" />
+    <ClInclude Include="calc_thread_mgr.h" />
     <ClInclude Include="camara.h" />
     <ClInclude Include="comm.h" />
     <ClInclude Include="constant_medium.h" />

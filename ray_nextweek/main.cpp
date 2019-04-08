@@ -13,6 +13,8 @@
 #include "rotate.h"
 #include "constant_medium.h"
 #include "bvh_node.h"
+#include "calc_thread_mgr.h"
+#include "calc_thread.h"
 
 hitable *random_scene() {
 	int n = 500;
@@ -148,37 +150,37 @@ hitable *final()
 		for (int j = 0; j < nb; j++)
 		{
 			float w = 100;
-			float x0 = i * w;
+			float x0 = i * w - 600.0f;
 			float z0 = j * w;
-			float y0 = 555.0f - 100.0f * (randf() + 0.01f);
+			float y0 = 800.0f - 100.0f * (randf() + 0.01f);
 			float x1 = x0 + w;
 			float z1 = z0 + w;
-			float y1 = 555;
+			float y1 = 800.0f;
 			boxlist[b++] = new box(CVec3(x0, y0, z0), CVec3(x1, y1, z1), ground);
 		}
 
 	list[l++] = new bvh_node(boxlist, b, 0, 1);
 
-	list[l++] = new CSphere(CVec3(260, 405, 45), 50, new dielectric(1.5));
-	list[l++] = new CSphere(CVec3(0, 405, 145), 50, new metal(CVec3(0.8, 0.8, 0.9), 10.0));
+	list[l++] = new CSphere(CVec3(260, 650, 45), 50, new dielectric(1.5));
+	list[l++] = new CSphere(CVec3(0, 650, 145), 50, new metal(CVec3(0.8, 0.8, 0.9), 10.0));
 
 	return new Chitlist(list, l);
 }
 
 int main()
 {
-	freopen("data.ppm", "w", stdout);
+	time_t timeBegin = time(NULL);
 
 	int nx = 1200;
 	int ny = 800;
-	int ns = 2000;
+	int ns = 10000;
 
 	//CVec3 lookfrom_origin(13.0f, 2.0f, 5.0f);
 	//CVec3 lookfrom(lookfrom_origin * 3.0f);
 	//CVec3 lookat(0, 0, 0);
 
-	CVec3 lookfrom(278.0f, 278.0f, -800.0f);
-	CVec3 lookat(278.0f, 278.0f, 0.0f);
+	CVec3 lookfrom(278.0f, 600.0f, -1050.0f);
+	CVec3 lookat(139.0f, 400.0f, 0.0f);
 	float dist_to_focus = 10.0f;
 	float aperture = 0.0f;
 	float vof = 40.0f;
@@ -200,29 +202,59 @@ int main()
 	//hitable *world = cornell_smoke();
 	hitable *world = final();
 
-	std::cout << "P3\n" << nx << " " << ny << "\n255\n";
-	for (int j = ny - 1; j >= 0; j--)
-	{
-		for (int i = 0; i < nx; i++)
-		{
-			CVec3 vecColor(0.0f, 0.0f, 0.0f);
-			for (int k = 0; k < ns; k++)
-			{
-				float u = float(i + randf()) / float(nx);
-				float v = float(j + randf()) / float(ny);
-				CRay ray = cam.get_ray(u, v);
-				CVec3 vec = color(ray, world, 0);
-				vecColor += vec;
-			}
+	int xsplit, ysplit;
+	xsplit = ysplit = 4;
+	int xstep = nx / xsplit;
+	int ystep = ny / ysplit;
 
-			vecColor /= float(ns);
-			vecColor = CVec3(sqrt(vecColor.r()), sqrt(vecColor.g()), sqrt(vecColor.b()));
-			int ir = int(255.99 * vecColor.r());
-			int ig = int(255.99 * vecColor.g());
-			int ib = int(255.99 * vecColor.b());
-			std::cout << ir << " " << ig << " " << ib << "\n";
+	CCalcThreadMgr g_calcthreadmgr;
+
+	for (int x = 0; x < xsplit; x++)
+	{
+		for (int y = 0; y < ysplit; y++)
+		{
+			SPos2 posStart, posEnd;
+			posStart.x = xstep * x;
+			posStart.y = ystep * y;
+			posEnd.x = posStart.x + xstep;
+			posEnd.y = posStart.y + ystep;
+
+			g_calcthreadmgr.insert_calc_thread(new CCalcThread(posStart, posEnd, ns, nx, ny, &cam, world, &g_calcthreadmgr));
 		}
 	}
+
+	g_calcthreadmgr.do_thread_calc();
+	g_calcthreadmgr.dump_full_pic(nx, ny);
+
+	time_t timeEnd = time(NULL);
+
+	std::cout << "Elpased Time: " << (timeEnd - timeBegin) << "\n";
+
+	system("pause");
+
+	//std::cout << "P3\n" << nx << " " << ny << "\n255\n";
+	//for (int j = ny - 1; j >= 0; j--)
+	//{
+	//	for (int i = 0; i < nx; i++)
+	//	{
+	//		CVec3 vecColor(0.0f, 0.0f, 0.0f);
+	//		for (int k = 0; k < ns; k++)
+	//		{
+	//			float u = float(i + randf()) / float(nx);
+	//			float v = float(j + randf()) / float(ny);
+	//			CRay ray = cam.get_ray(u, v);
+	//			CVec3 vec = color(ray, world, 0);
+	//			vecColor += vec;
+	//		}
+
+	//		vecColor /= float(ns);
+	//		vecColor = CVec3(sqrt(vecColor.r()), sqrt(vecColor.g()), sqrt(vecColor.b()));
+	//		int ir = int(255.99 * vecColor.r());
+	//		int ig = int(255.99 * vecColor.g());
+	//		int ib = int(255.99 * vecColor.b());
+	//		std::cout << ir << " " << ig << " " << ib << "\n";
+	//	}
+	//}
 
 	return 0;
 }

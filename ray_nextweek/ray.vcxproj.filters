@@ -52,6 +52,12 @@
     <ClCompile Include="constant_medium.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="calc_thread.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="calc_thread_mgr.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vec3.h">
@@ -103,6 +109,12 @@
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="constant_medium.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="calc_thread.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="calc_thread_mgr.h">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
